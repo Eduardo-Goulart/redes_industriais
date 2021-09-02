@@ -85,40 +85,35 @@ def receive_msg(server, fail_state_count = 0):
             print('PV = ', PV, ' Lux')
             
         elif identifier == 'A':
-            
-            print('AA')
-            if len(messages) != 0:
+            if FIRST_ITER:
+                FIRST_ITER = False
+                messages = []
                 
-                MV = int(messages[0])
-                messages.pop(0)
-                newmv = MV + 20
+            else:
+                if len(messages) != 0:
 
-                if MV < 0:
-                    newmv = MV + 30
-                    print('',newmv)
-                    #bytes_to_send = int.to_bytes(0, 3, byteorder = 'little')
-                    #server.sendto(bytes_to_send, address)
+                    MV = int(messages[0])
+                    messages.pop(0)
+                    newmv = MV + 20
+
+                    if MV < 0:
+                        newmv = MV + 30
+
+                    control_client(newmv)
+
                 else:
-                    pass
-                    #bytes_to_send = int.to_bytes(MV, 3, byteorder = 'little')
-                    #server.sendto(bytes_to_send, address)
+                    server.sendto(NO_DATA, address)
+                    fail_state_count = fail_state_count + 1 
 
-                print('alo alo alo')
-                control_client(newmv)
+                    print('No data sent to actuator')
 
-                #else:
-                    #server.sendto(NO_DATA, address)
-                    #fail_state_count = fail_state_count + 1 
+                    if fail_state_count == 10:
+                        server.sendto(int.to_bytes(0, 4, 'little'), address)
+                        print('Fail state activated')
+                        sys.exit(1)
 
-                    #print('No data sent to actuator')
-
-                    #if fail_state_count == 10:
-                        #server.sendto(int.to_bytes(0, 4, 'little'), address)
-                        #print('Fail state activated')
-                        #sys.exit(1)
-
-        #else:
-            #print('Cant interpretate request')
+        else:
+            print('Cant interpretate request')
             
         print('--------------------')
         time.sleep(1)

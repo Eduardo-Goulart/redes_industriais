@@ -41,7 +41,7 @@ def send_message(client):
         
 #         valor_sensor = int(arduino.readline())
         
-        bytes_to_send = int.to_bytes(valor_sensor, 4, byteorder='little')
+        bytes_to_send = int.to_bytes(valor_sensor, 3, byteorder='little')
         PV = NAME + bytes_to_send
         
         print('Sending: ', PV)
@@ -52,7 +52,7 @@ def send_message(client):
         
         print('Response: ', response.decode())
         
-        time.sleep(3.0)
+        time.sleep(1.0)
         
 client = connect()
 #arduino = connect_arduino()

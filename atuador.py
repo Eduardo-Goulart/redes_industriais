@@ -12,8 +12,9 @@ HOST    = '25.93.32.9'                        # IP do hamachi
 PERIOD  = 500                                   
 NAME    = b'A'                                # Nome do serviço 
 BUFFER  = 1024
-SERVER = (HOST, PORT)
 PORT    = 9888
+
+SERVER = (HOST, PORT)
 
 def connect_client():
     
@@ -38,8 +39,7 @@ def send_message(client):
         print('Recebido: ', value)
         
         if value != 'no_data':
-#             led.write(random_float)
-            pass
+            led.write(random_float)
         else:
             pass
         
