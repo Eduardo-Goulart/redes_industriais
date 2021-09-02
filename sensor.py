@@ -17,13 +17,15 @@ PORT    = 1234
 PERIOD  = 500                                   # Periodo do ciclo em ms
 NAME    = b'S'                                   # Nome do serviço 
 buffer = 1024
+C_PORT = 5555
 
 def connect():
     
     client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
     client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-    client.settimeout(5)
     
+    client.settimeout(5)
+    client.bind((HOST, C_PORT))  ## C_PORT É UMA PORTA FIXA DEFINIDA NO CÓDIGO
     print('Client connected...')
     
     return client
@@ -35,7 +37,7 @@ def send_message(client):
     
     while True:
         
-        valor_sensor = randint(0, 10)
+        valor_sensor = randint(1, 10)
         
 #         valor_sensor = int(arduino.readline())
         
@@ -50,7 +52,7 @@ def send_message(client):
         
         print('Response: ', response.decode())
         
-        time.sleep(1.5)
+        time.sleep(3.0)
         
 client = connect()
 #arduino = connect_arduino()
