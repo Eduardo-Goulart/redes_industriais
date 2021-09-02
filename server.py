@@ -39,7 +39,7 @@ def receive_msg(server, fail_state_count = 0):
     global FIRST_ITER
     
     while True:
-        print('listening')
+
         message, address = server.recvfrom(1024)
         
         print('message: ', message)
@@ -71,12 +71,22 @@ def receive_msg(server, fail_state_count = 0):
 
                     print('Sending: ', to_send)
 
-#                     MV = control(to_send, 50, 100, 0, 100)
-
-                    # SIMULACAO
+#                     MV = control(to_send, 60, 100, 0, 100)
                     MV = control(to_send, 0, 10, 0, 100)
+                    
+                    print('MV = ', MV)
+                    
+                    if MV < 0:
+#                     if MV < 60:
+                        bytes_to_send = int.to_bytes(0, 4, byteorder = 'little')
+                        server.sendto(bytes_to_send, address)
+                    else:
+                        bytes_to_send = int.to_bytes(MV, 4, byteorder = 'little')
+                        server.sendto(bytes_to_send, address)
+                        
+                    # SIMULACAO
+#                     MV = control(to_send, 0, 100, 0, 100)
 
-                    bytes_to_send = int.to_bytes(MV, 4, byteorder = 'little')
                     server.sendto(bytes_to_send, address)
 
                 else:
@@ -95,7 +105,7 @@ def receive_msg(server, fail_state_count = 0):
             
         print('--------------------')
             
-        time.sleep(0.5)
+        time.sleep(0.2)
         
 server = setup()
 
